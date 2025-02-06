@@ -19,7 +19,7 @@ export class UsersService {
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
-    const oldUser = this.userRepository.findOne({
+    const oldUser = await this.userRepository.findOne({
       where: {
         ...createUserDto,
       },
