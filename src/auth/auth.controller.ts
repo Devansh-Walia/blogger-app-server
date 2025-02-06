@@ -17,4 +17,16 @@ export class AuthController {
   async googleAuthCallback(@Req() req) {
     return this.authService.login(req.user);
   }
+
+  @Get('facebook')
+  @UseGuards(AuthGuard('facebook'))
+  async facebookAuth() {
+    // Guard will handle the authentication
+  }
+
+  @Get('facebook/callback')
+  @UseGuards(AuthGuard('facebook'))
+  async facebookAuthCallback(@Req() req) {
+    return this.authService.login(req.user);
+  }
 }
