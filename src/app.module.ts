@@ -5,6 +5,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { PostsModule } from './posts/posts.module';
+import { AuthModule } from './auth/auth.module';
 import { User } from './users/entities/user.entity';
 import { Post } from './posts/entities/post.entity';
 
@@ -12,6 +13,7 @@ import { Post } from './posts/entities/post.entity';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      envFilePath: '.env',
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
@@ -29,6 +31,7 @@ import { Post } from './posts/entities/post.entity';
     }),
     UsersModule,
     PostsModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
