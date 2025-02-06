@@ -1,4 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+
+import { Post } from 'src/posts/entities/post.entity';
 
 @Entity()
 export class User {
@@ -10,4 +12,7 @@ export class User {
 
   @Column()
   provider: string; // 'google' or 'facebook'
+
+  @OneToMany(() => Post, (post) => post.user)
+  posts: Post[];
 }
