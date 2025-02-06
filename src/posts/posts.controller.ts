@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Query,
+} from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
@@ -13,8 +22,15 @@ export class PostsController {
   }
 
   @Get()
-  findAll() {
-    return this.postsService.findAll();
+  async findAll(@Query('limit') limit = 10, @Query('offset') offset: number) {
+    const [posts, total] = await this.postsService.findAll(limit, offset);
+
+    return {
+      posts,
+      total,
+      limit,
+      offset,
+    };
   }
 
   @Get(':id')
