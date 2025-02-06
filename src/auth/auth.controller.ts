@@ -8,8 +8,9 @@ export class AuthController {
 
   @Get('google')
   @UseGuards(AuthGuard('google'))
-  async googleAuth() {
+  googleAuth() {
     // Guard will handle the authentication
+    return;
   }
 
   @Get('google/callback')
@@ -20,8 +21,9 @@ export class AuthController {
 
   @Get('facebook')
   @UseGuards(AuthGuard('facebook'))
-  async facebookAuth() {
+  facebookAuth() {
     // Guard will handle the authentication
+    return;
   }
 
   @Get('facebook/callback')
