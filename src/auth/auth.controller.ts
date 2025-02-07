@@ -26,8 +26,6 @@ export class AuthController {
       this.configService.get('FRONTEND_URL') + '/auth/callback',
     );
 
-    console.log(redirect);
-
     redirect.searchParams.append('access_token', values.access_token);
     redirect.searchParams.append('user', JSON.stringify(values.user));
 
