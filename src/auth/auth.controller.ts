@@ -1,10 +1,14 @@
-import { Controller, Get, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
+import { ConfigService } from '@nestjs/config';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly configService: ConfigService,
+  ) {}
 
   @Get('google')
   @UseGuards(AuthGuard('google'))
@@ -15,8 +19,19 @@ export class AuthController {
 
   @Get('google/callback')
   @UseGuards(AuthGuard('google'))
-  async googleAuthCallback(@Req() req) {
-    return this.authService.login(req.user);
+  async googleAuthCallback(@Req() req, @Res() res) {
+    const values = await this.authService.login(req.user);
+
+    const redirect = new URL(
+      this.configService.get('FRONTEND_URL') + '/auth/callback',
+    );
+
+    console.log(redirect);
+
+    redirect.searchParams.append('access_token', values.access_token);
+    redirect.searchParams.append('user', JSON.stringify(values.user));
+
+    return res.redirect(302, redirect.toString());
   }
 
   @Get('facebook')
@@ -28,7 +43,16 @@ export class AuthController {
 
   @Get('facebook/callback')
   @UseGuards(AuthGuard('facebook'))
-  async facebookAuthCallback(@Req() req) {
-    return this.authService.login(req.user);
+  async facebookAuthCallback(@Req() req, @Res() res) {
+    const values = await this.authService.login(req.user);
+
+    const redirect = new URL(
+      this.configService.get('FRONTEND_URL') + '/auth/callback',
+    );
+
+    redirect.searchParams.append('access_token', values.access_token);
+    redirect.searchParams.append('user', JSON.stringify(values.user));
+
+    return res.redirect(302, redirect.toString());
   }
 }
